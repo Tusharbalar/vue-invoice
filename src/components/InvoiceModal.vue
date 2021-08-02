@@ -1,0 +1,199 @@
+<template>
+  <div @click="checkClick" ref="invoiceWrap" class="invoice-wrap flex-column">
+    <form @submit.prevent="submitForm" action="" class="invoice-content">
+      <h1>New Invoice</h1>
+
+      <!-- Bill From -->
+      <div class="bill-from flex flex-column">
+        <h4>Bill From</h4>
+        <div class="input flex flex-column">
+          <label for="billerStreetAddress">Street Address</label>
+          <input type="text" id="billerStreetAddress" v-model="billerStreetAddress" required />
+        </div>
+        <div class="location-details flex">
+          <div class="input flex flex-column">
+            <label for="billerCity">City</label>
+            <input type="text" id="billerCity" v-model="billerCity" required />
+          </div>
+          <div class="input flex flex-column">
+            <label for="billerZipCode">ZipCode</label>
+            <input type="text" id="billerZipCode" v-model="billerZipCode" required />
+          </div>
+          <div class="input flex flex-column">
+            <label for="billerCountry">Country</label>
+            <input type="text" id="billerCountry" v-model="billerCountry" required />
+          </div>
+        </div>
+      </div>
+
+      <!-- Bill To -->
+      <div class="bill-to flex flex-column">
+        <h4>Bill To</h4>
+        <div class="input flex flex-column">
+          <label for="clientName">Client's Name</label>
+          <input type="text" id="clientName" v-model="clientName" required />
+        </div>
+        <div class="input flex flex-column">
+          <label for="clientEmail">Client's Email</label>
+          <input type="text" id="clientEmail" v-model="clientEmail" required />
+        </div>
+        <div class="input flex flex-column">
+          <label for="clientStreetAddress">Street Address</label>
+          <input type="text" id="clientStreetAddress" v-model="clientStreetAddress" required />
+        </div>
+        <div class="location-details flex">
+          <div class="input flex flex-column">
+            <label for="clientCity">City</label>
+            <input type="text" id="clientCity" v-model="clientCity" required />
+          </div>
+          <div class="input flex flex-column">
+            <label for="clientZipCode">ZipCode</label>
+            <input type="text" id="clientZipCode" v-model="clientZipCode" required />
+          </div>
+          <div class="input flex flex-column">
+            <label for="clientCountry">Country</label>
+            <input type="text" id="clientCountry" v-model="clientCountry" required />
+          </div>
+        </div>
+      </div>
+
+      <!-- Invoice Work Details -->
+      <div class="invoice-work flex flex-column">
+        <div class="payment flex">
+           <div class="input flex flex-column">
+            <label for="invoiceDate">Invoice Date</label>
+            <input type="text" id="invoiceDate" v-model="invoiceDate" disabled />
+          </div>
+           <div class="input flex flex-column">
+            <label for="paymentDueDate">Payment Due</label>
+            <input type="text" id="paymentDueDate" v-model="paymentDueDate" disabled />
+          </div>
+        </div>
+        <div class="input flex flex-column">
+          <label for="paymentTerms">Payment Terms</label>
+          <select id="paymentTerms" v-model="paymentTerms" requried>
+            <option value="30">Next 30 days</option>
+            <option value="60">Next 60 days</option>
+          </select>
+        </div>
+        <div class="input flex flex-column">
+          <label for="productDescription">Product Description</label>
+          <input type="text" id="productDescription" v-model="productDescription" disabled />
+        </div>
+        <div class="work-items">
+          <h3>Item List</h3>
+          <table class="item-list">
+            <tr class="table-heading flex">
+              <th class="item-name">Item Name</th>
+              <th class="qty-">Qty</th>
+              <th class="price">Price</th>
+              <th class="total">Total</th>
+            </tr>
+            <tr class="table-items flex" v-for="(item, index) in invoiceItemList" :key="index">
+              <td class="item-name">
+                <input type="text" v-model="item.itemName">
+              </td>
+              <td class="qty-">
+                <input type="text" v-model="item.qty">
+              </td>
+              <td class="price">
+                <input type="text" v-model="item.price">
+              </td>
+              <td class="total flex">
+                ${{ (item.total = item.qty * item.price) }}
+              </td>
+              <img @click="deleteInvoiceItem(item.id)" src="@/assets/icon-delete.svg" alt="" />
+            </tr>
+          </table>
+          <div @click="addNewInvoiceItem" class="flex button">
+            <img src="@/assets/icon-plus.svg" alt="" />
+            Add New Item
+          </div>
+        </div>
+      </div>
+
+      <!-- Save/Exit -->
+      <div class="save flex">
+        <div class="left">
+          <button @click="closeInvoice" class="red">Cancel</button>
+        </div>
+        <div class="right flex">
+          <button @click="saveDraft" class="dark-purple">Save Draft</button>
+          <button @click="publishInvoice" class="purple">Create Invoice</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'invoiceModal',
+  data() {
+    return {
+      billerStreetAddress: null,
+      billerCity: null,
+      billerZipCode: null,
+      billerCountry: null,
+      clientName: null,
+      clientEmail: null,
+      clientStreetAddress: null,
+      clientCity: null,
+      clientZipCode: null,
+      clientCountry: null,
+      invoiceDateUnix: null,
+      invoiceDate: null,
+      paymentTerms: null,
+      paymentDueDateUnix: null,
+      paymentDueDate: null,
+      productDescription: null,
+      invoicePending: null,
+      invoiceDraft: null,
+      invoiceItemList: [],
+      invoiceTotal: 0,
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+  .invoice-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: transparent;
+    width: 100%;
+    height: 100vh;
+    overflow: scroll;
+    @media(min-width: 900px) {
+      left: 90px;
+    }
+
+    .invoice-content {
+      position: relative;
+      padding: 56px;
+      max-width: 700px;
+      width: 100%;
+      background-color: #141625;
+      color: #fff;
+      box-shadow: 10px 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+      h1 {
+        margin-bottom: 48px;
+        color: #fff;
+      }
+
+      h3 {
+        margin-bottom: 16px;
+        font-size: 18px;
+        color: #777f98;
+      }
+
+      h4 {
+        color: #7c5dfa;
+        font-size: 12px;
+        margin-bottom: 24px;
+      }
+    }
+  }
+</style>
