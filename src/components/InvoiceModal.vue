@@ -1,6 +1,7 @@
 <template>
   <div @click="checkClick" ref="invoiceWrap" class="invoice-wrap flex-column">
     <form @submit.prevent="submitForm" action="" class="invoice-content">
+      <Loading v-show="loading" />
       <h1>New Invoice</h1>
 
       <!-- Bill From -->
@@ -78,7 +79,7 @@
         </div>
         <div class="input flex flex-column">
           <label for="productDescription">Product Description</label>
-          <input type="text" id="productDescription" v-model="productDescription" disabled />
+          <input type="text" id="productDescription" v-model="productDescription" />
         </div>
         <div class="work-items">
           <h3>Item List</h3>
@@ -127,14 +128,20 @@
 </template>
 
 <script>
+import db from '../firebase/firebaseInit';
 import { mapMutations } from 'vuex';
 import { uid } from "uid";
+import Loading from "./Loading.vue";
 
 export default {
   name: 'invoiceModal',
+  components: {
+    Loading
+  },
   data() {
     return {
       dateOptions: { year: "numeric", month: "short", day: "numeric" },
+      loading: null,
       billerStreetAddress: null,
       billerCity: null,
       billerZipCode: null,
@@ -158,7 +165,6 @@ export default {
     }
   },
   created() {
-
     // get current date for invoice date field
     this.invoiceDateUnix = Date.now();
     this.invoiceDate = new Date(this.invoiceDateUnix).toLocaleDateString('en-us', this.dateOptions)
@@ -182,6 +188,65 @@ export default {
 
     deleteInvoiceItem(id) {
       this.invoiceItemList = this.invoiceItemList.filter(item => item.id != id);
+    },
+
+    calInvoiceTotal() {
+      this.invoiceTotal = 0;
+      this.invoiceItemList.forEach(item => {
+        this.invoiceTotal += item.total;
+      });
+    },
+
+    publishInvoice() {
+      this.invoicePending = true;
+    },
+
+    saveDraft() {
+      this.invoiceDraft = true;
+    },
+
+    async uploadInvoice() {
+      if (!this.invoiceItemList.length) {
+        alert("Please ensure you filled out work items!");
+        return;
+      }
+
+      this.loading = true;
+      this.calInvoiceTotal();
+
+      const database = db.collection('invoices').doc();
+
+      await database.set({
+        invoiceId: uid(6),
+        billerStreetAddress: this.billerStreetAddress,
+        billerCity: this.billerCity,
+        billerZipCode: this.billerZipCode,
+        billerCountry: this.billerCountry,
+        clientName: this.clientName,
+        clientEmail: this.clientEmail,
+        clientStreetAddress: this.clientStreetAddress,
+        clientCity: this.clientCity,
+        clientZipCode: this.clientZipCode,
+        clientCountry: this.clientCountry,
+        invoiceDateUnix: this.invoiceDateUnix,
+        invoiceDate: this.invoiceDate,
+        paymentTerms: this.paymentTerms,
+        paymentDueDateUnix: this.paymentDueDateUnix,
+        paymentDueDate: this.paymentDueDate,
+        productDescription: this.productDescription,
+        invoicePending: this.invoicePending,
+        invoiceDraft: this.invoiceDraft,
+        invoiceItemList: this.invoiceItemList,
+        invoiceTotal: this.invoiceTotal,
+        invoicePaid: null
+      });
+
+      this.loading = null;
+      this.TOGGLE_INVOICE();
+    },
+
+    submitForm() {
+      this.uploadInvoice();
     }
   },
   watch: {
