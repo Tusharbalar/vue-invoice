@@ -57,7 +57,6 @@ export default createStore({
         }
       });
 
-      console.log(results)
       commit("INVOICES_LOADED");
     }
   },
