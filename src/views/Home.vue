@@ -27,8 +27,16 @@
     </div>
 
     <!-- Invoices -->
-    <div>
+    <div v-if="invoiceData.length">
       <Invoices v-for="(invoice, index) in invoiceData" :invoice="invoice" :key="index" />
+    </div>
+    <div v-else class="empty flex flex-column">
+      <img src="@/assets/illustration-empty.svg" alt="" />
+      <h3>There is nothing here</h3>
+      <p>Create a new invoice by clicking the New Invoice button and get started</p>
+    </div>
+    <div v-if="!invoicesLoaded && !invoiceData.length">
+      <Loading />
     </div>
   </div>
 </template>
@@ -36,11 +44,13 @@
 <script>
 import Invoices from "../components/Invoice.vue";
 import { mapMutations, mapState } from 'vuex';
+import Loading from "../components/Loading.vue";
 
 export default {
   name: "Home",
   components: {
-    Invoices
+    Invoices,
+    Loading
   },
   data() {
     return {
@@ -59,7 +69,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(['invoiceData'])
+    ...mapState(['invoiceData', 'invoicesLoaded'])
   }
 };
 </script>
@@ -138,6 +148,29 @@ export default {
             }
           }
         }
+      }
+    }
+
+    .empty {
+      margin-top: 160px;
+      align-items: center;
+
+      img {
+        width: 214px;
+        height: 200px;
+      }
+
+      h3 {
+        font-size: 20px;
+        margin-top: 40px;
+      }
+
+      p {
+        text-align: center;
+        max-width: 224px;
+        font-size: 12px;
+        font-weight: 300;
+        margin-top: 16px;
       }
     }
   }
