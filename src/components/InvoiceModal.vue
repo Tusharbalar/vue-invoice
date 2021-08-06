@@ -2,7 +2,8 @@
   <div @click="checkClick" ref="invoiceWrap" class="invoice-wrap flex-column">
     <form @submit.prevent="submitForm" action="" class="invoice-content">
       <Loading v-show="loading" />
-      <h1>New Invoice</h1>
+      <h1 v-if="!editInvoice">New Invoice</h1>
+      <h1 v-else>Edit Invoice</h1>
 
       <!-- Bill From -->
       <div class="bill-from flex flex-column">
@@ -118,9 +119,12 @@
         <div class="left">
           <button type="button" @click="closeInvoice" class="red">Cancel</button>
         </div>
-        <div class="right flex">
+        <div v-if="!editInvoice" class="right flex">
           <button type="submit" @click="saveDraft" class="dark-purple">Save Draft</button>
           <button type="submit" @click="publishInvoice" class="purple">Create Invoice</button>
+        </div>
+        <div v-else class="right flex">
+          <button type="submit" @click="saveDraft" class="purple">Update</button>
         </div>
       </div>
     </form>
@@ -129,7 +133,7 @@
 
 <script>
 import db from '../firebase/firebaseInit';
-import { mapMutations } from 'vuex';
+import { mapMutations, mapState } from 'vuex';
 import { uid } from "uid";
 import Loading from "./Loading.vue";
 
@@ -170,7 +174,7 @@ export default {
     this.invoiceDate = new Date(this.invoiceDateUnix).toLocaleDateString('en-us', this.dateOptions)
   },
   methods: {
-    ...mapMutations(['TOGGLE_INVOICE', 'TOGGLE_MODAL']),
+    ...mapMutations(['TOGGLE_INVOICE', 'TOGGLE_MODAL', 'TOGGLE_EDIT_INVOICE']),
 
     checkClick(e) {
       if (e.target == this.$refs.invoiceWrap) {
@@ -179,7 +183,10 @@ export default {
     },
 
     closeInvoice() {
-      this.TOGGLE_INVOICE()
+      this.TOGGLE_INVOICE();
+      if (this.editInvoice) {
+        this.TOGGLE_EDIT_INVOICE();
+      }
     },
 
     addNewInvoiceItem() {
@@ -254,6 +261,9 @@ export default {
     submitForm() {
       this.uploadInvoice();
     }
+  },
+  computed: {
+    ...mapState(['editInvoice'])
   },
   watch: {
     paymentTerms() {
