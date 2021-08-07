@@ -4,17 +4,17 @@
     <div class="header flex">
       <div class="left flex flex-column">
         <h1>Invoices</h1>
-        <span>There are 4 total invoices</span>
+        <span>There are {{ invoiceData.length }} total invoices</span>
       </div>
       <div class="right flex">
         <div @click="tiggleFilterMenu" class="filter flex">
-          <span>Filter by status</span>
+          <span>Filter by status<span v-if="filteredInvoice">: {{ filteredInvoice }}</span></span>
           <img src="@/assets/icon-arrow-down.svg" alt="" />
           <ul v-show="filterMenu" class="filter-menu">
-            <li>Draft</li>
-            <li>Pending</li>
-            <li>Paid</li>
-            <li>Clear Filter</li>
+            <li @click="filteredInvoices">Draft</li>
+            <li @click="filteredInvoices">Pending</li>
+            <li @click="filteredInvoices">Paid</li>
+            <li @click="filteredInvoices">Clear Filter</li>
           </ul>
         </div>
         <div @click="newInvoice" class="button flex">
@@ -28,7 +28,7 @@
 
     <!-- Invoices -->
     <div v-if="invoiceData.length">
-      <Invoices v-for="(invoice, index) in invoiceData" :invoice="invoice" :key="index" />
+      <Invoices v-for="(invoice, index) in filteredData" :invoice="invoice" :key="index" />
     </div>
     <div v-else class="empty flex flex-column">
       <img src="@/assets/illustration-empty.svg" alt="" />
@@ -54,7 +54,8 @@ export default {
   },
   data() {
     return {
-      filterMenu: false
+      filterMenu: false,
+      filteredInvoice: null
     }
   },
   methods: {
@@ -67,9 +68,33 @@ export default {
     tiggleFilterMenu() {
       this.filterMenu = !this.filterMenu
     },
+
+    filteredInvoices(e) {
+      if (e.target.innerText == 'Clear Filter') {
+        this.filteredInvoice = null;
+        return;
+      }
+
+      this.filteredInvoice = e.target.innerText;
+    }
   },
   computed: {
-    ...mapState(['invoiceData', 'invoicesLoaded'])
+    ...mapState(['invoiceData', 'invoicesLoaded']),
+
+    filteredData() {
+      return this.invoiceData.filter((invoice) => {
+        if (this.filteredInvoice == 'Draft') {
+          return invoice.invoiceDraft === true;
+        }
+        if (this.filteredInvoice == 'Pending') {
+          return invoice.invoicePending === true;
+        }
+        if (this.filteredInvoice == 'Paid') {
+          return invoice.invoicePaid === true;
+        }
+        return invoice;
+      });
+    }
   }
 };
 </script>
