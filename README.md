@@ -1,4 +1,4 @@
-# invoice
+# Invoice App
 
 ## Project setup
 ```
@@ -18,6 +18,14 @@ yarn build
 ### Lints and fixes files
 ```
 yarn lint
+```
+
+### Features
+```
+  User can able to create invoice and store the data in the database
+  User can able filter the invoice by it's status
+  User can able to edit and delete the record
+  Realtime changes
 ```
 
 ### Customize configuration
