@@ -87,7 +87,7 @@
           <table class="item-list">
             <tr class="table-heading flex">
               <th class="item-name">Item Name</th>
-              <th class="qty-">Qty</th>
+              <th class="qty">Qty</th>
               <th class="price">Price</th>
               <th class="total">Total</th>
             </tr>
@@ -95,13 +95,13 @@
               <td class="item-name">
                 <input type="text" v-model="item.itemName">
               </td>
-              <td class="qty-">
+              <td class="qty">
                 <input type="text" v-model="item.qty">
               </td>
               <td class="price">
                 <input type="text" v-model="item.price">
               </td>
-              <td class="total flex">
+              <td class="total total-amount flex">
                 ${{ (item.total = item.qty * item.price) }}
               </td>
               <img @click="deleteInvoiceItem(item.id)" src="@/assets/icon-delete.svg" alt="" />
@@ -374,7 +374,7 @@ export default {
       padding: 56px;
       max-width: 700px;
       width: 100%;
-      background-color: #141625;
+      background-color: #59646f;
       color: #fff;
       box-shadow: 10px 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
@@ -385,14 +385,12 @@ export default {
 
       h3 {
         margin-bottom: 16px;
-        font-size: 18px;
-        color: #777f98;
+        font-size: 15px;
       }
 
       h4 {
-        color: #7c5dfa;
-        font-size: 12px;
-        margin-bottom: 24px;
+        font-size: 15px;
+        margin-bottom: 15px;
       }
 
       // Bill To / Bill From
@@ -432,16 +430,20 @@ export default {
               }
 
               .qty {
-                flex-basis: 10%;
+                flex-basis: 15%;
               }
 
               .price {
-                flex-basis: 20%;
+                flex-basis: 15%;
               }
 
               .total {
                 flex-basis: 20%;
                 align-self: center;
+              }
+
+              .total-amount {
+                font-size: 15px;
               }
             }
 
@@ -506,10 +508,10 @@ export default {
     input,
     select {
       width: 100%;
-      background-color: #1e2139;
-      color: #fff;
+      // background-color: #1e2139;
+      // color: #fff;
       border-radius: 4px;
-      padding: 12px 4px;
+      padding: 12px 10px;
       border: none;
 
       &:focus {

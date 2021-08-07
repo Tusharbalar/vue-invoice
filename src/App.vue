@@ -66,7 +66,7 @@ export default {
   font-family: "Poppins", sans-serif;
 }
 .app {
-  background-color: #141625;
+  background-color: #dfe3fa;
   min-height: 100vh;
   @media (min-width: 900px) {
     flex-direction: row !important;
@@ -84,8 +84,8 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #141625;
-  color: #fff;
+  // background-color: #141625;
+  // color: #fff;
   p {
     margin-top: 16px;
   }
@@ -105,7 +105,7 @@ export default {
 button,
 .button {
   cursor: pointer;
-  padding: 16px 24px;
+  padding: 10px 25px;
   border-radius: 30px;
   border: none;
   font-size: 12px;

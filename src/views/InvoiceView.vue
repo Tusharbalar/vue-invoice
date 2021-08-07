@@ -152,7 +152,7 @@ export default {
     .nav-link {
       margin-bottom: 32px;
       align-items: center;
-      color: #fff;
+      color: #9277ff;
       font-size: 12px;
       img {
         margin-right: 16px;
@@ -162,12 +162,12 @@ export default {
     }
     .header,
     .invoice-details {
-      background-color: #1e2139;
-      border-radius: 20px;
+      background-color: #1b2a3aba;
+      border-radius: 15px;
     }
     .header {
       align-items: center;
-      padding: 24px 32px;
+      padding: 20px 25px;
       font-size: 12px;
       .left {
         align-items: center;
@@ -256,7 +256,7 @@ export default {
         .billing-items {
           padding: 32px;
           border-radius: 20px 20px 0 0;
-          background-color: #252945;
+          background-color: #8a8a8a;
           .heading {
             color: #dfe3fa;
             font-size: 12px;
@@ -290,7 +290,7 @@ export default {
         .total {
           color: #fff;
           padding: 32px;
-          background-color: rgba(12, 14, 22, 0.7);
+          background-color: rgba(53, 53, 53, 0.7);
           align-items: center;
           border-radius: 0 0 20px 20px;
           p {

@@ -21,7 +21,7 @@
         <span v-if="invoice.invoicePending">Pending</span>
       </div>
       <div class="icon">
-        <img src="@/assets/icon-arrow-right.svg" alt="" />
+        <!-- <img src="@/assets/icon-arrow-right.svg" alt="" /> -->
       </div>
     </div>
   </router-link>
@@ -39,11 +39,11 @@ export default {
     text-decoration: none;
     cursor: pointer;
     gap: 16px;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
     color: #fff;
-    border-radius: 20px;
-    padding: 28px 32px;
-    background-color: #1e2139;
+    border-radius: 15px;
+    padding: 20px 20px;
+    background-color: #1b2a3aba;
     align-items: center;
 
     span {

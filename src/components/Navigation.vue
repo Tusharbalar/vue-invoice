@@ -16,17 +16,17 @@ export default {
   header {
     z-index: 99;
     flex-direction: row;
-    background-color: #1e2139;
+    background-color: #59646f;
     @media (min-width: 900px) {
       min-height: 100%;
       min-width: 90px;
       flex-direction: column;
-      border-radius: 0 20px 20px 0;
+      // border-radius: 0 20px 20px 0;
     }
 
     .branding {
-      border-radius: 0 20px 20px 0;
-      background-color: #7c5dfa;
+      // border-radius: 0 20px 20px 0;
+      background-color: #4787ed;
       justify-content: center;
       padding: 24px;
       @media(min-width: 900px) {

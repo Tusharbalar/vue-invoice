@@ -7,7 +7,7 @@
         <span>There are {{ invoiceData.length }} total invoices</span>
       </div>
       <div class="right flex">
-        <div @click="tiggleFilterMenu" class="filter flex">
+        <div @click="toggleFilterMenu" class="filter flex">
           <span>Filter by status<span v-if="filteredInvoice">: {{ filteredInvoice }}</span></span>
           <img src="@/assets/icon-arrow-down.svg" alt="" />
           <ul v-show="filterMenu" class="filter-menu">
@@ -65,7 +65,7 @@ export default {
       this.TOGGLE_INVOICE();
     },
 
-    tiggleFilterMenu() {
+    toggleFilterMenu() {
       this.filterMenu = !this.filterMenu
     },
 
@@ -101,7 +101,7 @@ export default {
 
 <style lang="scss" scoped>
   .home {
-    color: #fff;
+    // color: #fff;
 
     .header {
       margin-bottom: 65px;
@@ -139,7 +139,7 @@ export default {
             position: absolute;
             top: 25px;
             list-style: none;
-            background-color: #1e2139;
+            background-color: #f8ffff;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
             li {
@@ -148,8 +148,8 @@ export default {
               padding: 10px 20px;
 
               &:hover {
-                color: #1e2139;
-                background-color: #fff;
+                color: #fff;
+                background-color: #4787ed;
               }
             }
           }
@@ -157,8 +157,9 @@ export default {
 
         .button {
           padding: 8px 10px;
-          background-color: #7c5dfa;
+          background-color: #4787ed;
           border-radius: 40px;
+          color: #fff;
 
           .inner-button {
             margin-right: 8px;
